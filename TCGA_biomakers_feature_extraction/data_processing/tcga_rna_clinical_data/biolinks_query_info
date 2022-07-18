@@ -1,0 +1,116 @@
+
+Source: Biolinks Vignettes
+(local/library/TCGAbiolinks/doc/download_prepare.html)
+
+Uses GDC API to search for search, it searches for both controlled and open-access data. For GDC
+data arguments project, data.category, data.type and workflow.type should be used For the legacy
+data arguments project, data.category, platform and/or file.extension should be used. Please, see the
+vignette for a table with the possibilities.
+
+
+GDCquery(
+            project,
+            data.category,
+            data.type,
+            workflow.type,
+            legacy = FALSE,
+            access,
+            platform,
+            file.type,
+            barcode,
+            data.format,
+            experimental.strategy,
+            sample.type
+           )
+
+# Data categories:
+
+• Biospecimen
+• Clinical (Clinical information about person)
+• Copy Number Variation
+• DNA Methylation
+• Sequencing Reads
+• Simple Nucleotide Variation
+• Transcriptome Profiling (Gene count)
+
+# Data type:
+
+    (Only avaliable for Transcriptome Profiling)
+•Gene Expression Quantification
+•Isoform Expression Quantification
+•miRNA Expression Quantification
+
+
+    (Only avaliable for Copy number variation)
+•Copy Number Segment
+•Masked Copy Number Segment
+•Gene Level Copy
+
+    (Only avaliable for Biospecimen)
+•Slide Image
+•Biospecimen Supplement
+
+
+Source: Internet
+(https://www.sevenbridges.com/genomic-data-commons-workflows/)
+
+# GDC Workflow type:
+
+DNASeq Harmonization Workflow
+The GDC DNASeq Harmonization workflow is used for harmonization of genomic data to the GRCh38 reference genome.
+This can be helpful when files within a data cohort are not aligned to the same reference, and it can be used
+to harmonize all data to the most up-to-date version of the genome. The steps within the workflow are to first
+convert a BAM input file to a FASTQ file, aligns the file to the GRCh38 reference genome using BWA, remove duplicates
+with Picard MarkDuplicates and processes the BAM file using GATK BQSR. The tool was modified by the Seven Bridges
+team for optimal performance in the cloud and for ease of use, without impacting the output of the tool. More info
+on running the DNASeq Harmonization workflow can be found here.
+
+RNASeq Workflow
+The GDC RNASeq workflow is used for alignment and quantification of RNA-Seq data to look at expression changes between
+samples. It takes either unmapped BAM or FASTQ files as inputs, uses STAR to align sequencing reads to the reference
+genome, and uses HTSeq to count sequencing reads based on the annotation file. Raw read counts are then normalized using
+two similar methods: FPKM and FPKM-UQ. More information on the RNASeq workflow can be found in the GDC documentation.
+
+Tumor Only Variant Calling Workflow
+The GDC Tumor Only Variant Calling workflow is used for variant calling on a tumor sample that does not have a matched
+normal sample. This method takes advantage of the normal cell contamination that is present in most tumor samples in
+order to differentiate between somatic and germline variation. These calls are made using the version of MuTect2 included
+in GATK4. Tumor-only variant call files can be found in the GDC Portal by filtering for “Workflow Type: GATK4 MuTect2”.
+The GDC Tumor Only Variant Calling Workflow harmonizes the file with VCF files in the TCGA dataset.
+
+# Legacy: Not relevant, legacy data is probable not relevant for novel research. Argument TRUE or FALSE.
+
+# Access: Filter by access type. Possible values: controlled, open.
+
+# Platform: Probable the technology used for sequencing?? See website for full description:
+
+    https://gdc.cancer.gov/resources-tcga-users/tcga-code-tables/platform-codes
+
+# File Type: To be used in the legacy database for some platforms, to define which file types to be used.
+
+# Data Format:
+
+    •VCF
+    •TXT
+    •BAM
+    •SVS
+    •BCR XML
+    •BCR SSF XML
+    •TSV
+    •BCR Auxiliary XML
+    •BCR OMF XML
+    •BCR Biotab
+    •MAF
+    •BCR PPS XML
+    •XLSX
+
+# Experimental strategy: (is this type of sequential technology not fully developed yet?)
+
+Filter to experimental strategy. Harmonized: WXS, RNA-Seq, miRNA-Seq,
+Genotyping Array. Legacy: WXS, RNA-Seq, miRNA-Seq, Genotyping Array,
+DNA-Seq, Methylation array, Protein expression array, WXS,CGH array,
+VALIDATION, Gene expression array,WGS, MSI-Mono-Dinucleotide Assay,
+miRNA expression array, Mixed strategies, AMPLICON, Exon array, Total RNASeq,
+Capillary sequencing, Bisulfite-Seq
+
+# Sample type: A sample type to filter the files to download
